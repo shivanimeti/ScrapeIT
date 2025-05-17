@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-6 bg-background rounded-lg shadow-lg">
+    <h1 class="text-3xl font-bold text-primary mb-6">Search for Businesses</h1>
+    
+    <form method="post" class="space-y-6">
+        {% csrf_token %}
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+                <div>
+                    <label for="{{ form.country.id_for_label }}" class="block text-text font-medium mb-2">Country</label>
+                    {{ form.country }}
+                </div>
+                
+                <div>
+                    <label for="{{ form.location.id_for_label }}" class="block text-text font-medium mb-2">Location (City/State)</label>
+                    {{ form.location }}
+                </div>
+                
+                <div>
+                    <label for="{{ form.keyword.id_for_label }}" class="block text-text font-medium mb-2">Product Keyword</label>
+                    {{ form.keyword }}
+                </div>
+            </div>
+            
+            <div class="bg-secondary bg-opacity-10 p-4 rounded-lg">
+                <h3 class="text-lg font-semibold text-text mb-4">Search Filters</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center">
+                        {{ form.shopify_only }}
+                        <label for="{{ form.shopify_only.id_for_label }}" class="ml-2 text-text">
+                            {{ form.shopify_only.label }}
+                        </label>
+                    </div>
+                    <div class="flex items-center">
+                        {{ form.fast_loading }}
+                        <label for="{{ form.fast_loading.id_for_label }}" class="ml-2 text-text">
+                            {{ form.fast_loading.label }}
+                        </label>
+                    </div>
+                    <div class="flex items-center">
+                        {{ form.active_only }}
+                        <label for="{{ form.active_only.id_for_label }}" class="ml-2 text-text">
+                            {{ form.active_only.label }}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="flex justify-center">
+            <button type="submit" class="px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-opacity-90 transition duration-300 transform hover:scale-105">
+                Search
+            </button>
+        </div>
+    </form>
+    
+    {% if messages %}
+    <div class="mt-6">
+        {% for message in messages %}
+        <div class="p-4 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-700{% elif message.tags == 'success' %}bg-green-100 text-green-700{% elif message.tags == 'warning' %}bg-yellow-100 text-yellow-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add custom styling to the select dropdown
+    document.addEventListener('DOMContentLoaded', function() {
+        const countrySelect = document.getElementById('{{ form.country.id_for_label }}');
+        if (countrySelect) {
+            // Add a nice select library or custom styling here if needed
+        }
+    });
+</script>
+{% endblock %}
+
+

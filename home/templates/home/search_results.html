@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto p-6 bg-background rounded-lg shadow-lg">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-primary">Search Results</h1>
+        <div class="flex space-x-3">
+            <a href="{% url 'search' %}" class="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-opacity-90 transition">
+                New Search
+            </a>
+            <a href="{% url 'download_csv' %}" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 transition">
+                Download CSV
+            </a>
+        </div>
+    </div>
+    
+    {% if results %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white rounded-lg overflow-hidden">
+            <thead class="bg-primary bg-opacity-10">
+                <tr>
+                    <th class="py-3 px-4 text-left text-text font-semibold text-white">Title</th>
+                    <th class="py-3 px-4 text-left text-text font-semibold text-white">URL</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for result in results %}
+                <tr class="hover:bg-gray-50">
+                    <td class="py-3 px-4 text-text">{{ result.title }}</td>
+                    <td class="py-3 px-4 text-primary">
+                        <a href="{{ result.url }}" target="_blank" class="hover:underline">
+                            {{ result.url|truncatechars:40 }}
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="mt-6 flex justify-center">
+        <a href="{% url 'process_urls' %}" class="px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-opacity-90 transition duration-300 transform hover:scale-105">
+            Extract Contact Information
+        </a>
+    </div>
+    {% else %}
+    <div class="p-6 bg-yellow-100 text-yellow-700 rounded-lg">
+        No search results found.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+

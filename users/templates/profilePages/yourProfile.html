@@ -1,0 +1,54 @@
+
+{% extends 'layout.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+    <div>
+        <div class="flex p-10 items-center justify-start gap-10 rounded-md flex-wrap border-2 border-slate-200 z-10">
+            <img src="{{ user.profile.image.url }}" alt="" class="w-40 h-40 rounded-full object-cover">
+            <div class="flex md:flex-col flex-row gap-6">
+                <span>
+                    <h2 class="text-3xl text-gray-700 font-bold md:text-right text-left">{{ user.username }}</h2>
+                    <p class="text-xl text-gray-700 font-bold md:text-right text-left">{{ user.email }}</p>
+                </span>
+            </div>
+        </div>
+        <form method="POST" enctype="multipart/form-data" id="editForm" class="p-5 rounded-xl duration-1000 -z-10">
+            {% csrf_token %}
+            <h1 class="text-3xl font-bold my-5  text-gray-700">Update Information</h1>
+            <div class="mb-4">
+                <label for="{{ u_form.username.id_for_label }}" class="block font-medium  text-tertiary-dark dark:text-tertiary-light">Username</label>
+                {{ u_form.username }}
+            </div>
+            <div class="mb-4">
+                <label for="{{ u_form.email.id_for_label }}" class="block font-medium  text-tertiary-dark dark:text-tertiary-light">Email</label>
+                {{ u_form.email }}
+            </div>
+            <div class="flex flex-col  text-tertiary-dark dark:text-tertiary-light">
+                <label for="{{ p_form.image.id_for_label }}" class="block font-medium  text-tertiary-dark dark:text-tertiary-light">Profile Image</label>
+                {{ p_form.image }}
+            </div>
+        
+            <div class="flex justify-between mt-4">
+                <button class="px-4 py-1 font-bold rounded-lg bg-gray-400 hover:bg-gray-600 text-white">Update</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        let isVisible = false;
+        const edit = document.getElementById('editForm')
+        function showEdit() {
+            isVisible = !isVisible;
+            if(isVisible){
+                edit.style.zIndex = '-10';
+                edit.style.transform = 'scaleY(1)';
+                edit.style.transition = 'all 0.1s ease-in-out';
+                return;
+            }else{
+                edit.style.transform = 'scaleY(0)';
+                edit.style.transition = 'all 0.1s ease-in-out';
+                return;
+            }    
+        }
+    </script>
+{% endblock content %}

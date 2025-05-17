@@ -1,0 +1,76 @@
+
+{% load static tailwind_tags %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    {% tailwind_css %}
+</head>
+<body class="bg-primary-light text-opacity-90 dark:bg-primary-dark overflow-x-hidden antialiased">
+    <div class = "w-full h-svh">
+        <nav class=" w-full py-2 bg-secondary-light dark:bg-secondary-dark shadow-sm ">
+            <div class="w-lvw flex items-center justify-around">
+                <a class="justify-start text-3xl text-[#68c2ef]" href="{% url 'home' %}"><strong>scrapeIT</strong></a>
+                    <div class="flex items-center text-secondary-dark dark:text-secondary-light">
+                        {% if user.is_authenticated %}
+                        <div>
+                            <select class="border border-[#d2eaf6] bg-tertiary-light dark:bg-tertiary-dark font-bold" name="profile-select" id="select" onchange="navigate()" title="{{user.username}}">
+                                <option value="" class="hidden "> {{user.username}}</option>
+                                <option value="{% url 'yourProfile' %}">Profile</option>
+                                {% comment %} <option value="{% url 'yourPosts' %}">Posts</option> {% endcomment %}
+                                <option value="{% url 'logout' %}" class="text-red-700">Logout ↪</option>
+                            </select>
+                        </div>
+                        {% else %}
+                        <div>
+                            <a class="justify-self-end font-bold" href="{% url 'login' %}">Login</a> |
+                            <a class="justify-self-end font-bold" href="{% url 'register' %}">Register</a>
+                        </div>
+                        {% endif %}
+                    </div>
+            </div>
+        </nav>
+        <div class="p-5 flex items-center justify-center">
+            {% if messages %}
+                {% for m in messages %}
+                    {% if "error" in m|stringformat:"s" %}
+                        <div class="max-w-lg border border-red-500 px-4 py-3 rounded relative bg-tertiary-light text-black dark:bg-tertiary-dark dark:text-white" role="alert">
+                            {% comment %} <strong class="font-bold">Holy smokes!</strong> {% endcomment %}
+                            <span class="block sm:inline">{{ m }}</span>
+                            <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                            </span>
+                        </div>
+                    {% else %}
+                        <div class=" border border-green-500 px-4 py-3 rounded relative" role="alert">
+                            {% comment %} <strong class="font-bold">Holy smokes!</strong> {% endcomment %}
+                            <span class="block sm:inline">{{ m }}</span>
+                            <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+                            </span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>                 
+        <div class="md:w-3/4 w-full max-w-3xl justify-self-center px-1">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </div>
+</body>
+<script>
+
+    document.cookie = "user_timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone + ";path=/";
+    
+    function navigate(){
+        const select = document.getElementById('select')
+        const url = select.value
+        if(url){
+            window.location.href = url;
+        }
+    }
+</script>
+</html>
+

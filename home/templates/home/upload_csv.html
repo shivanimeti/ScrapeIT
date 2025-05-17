@@ -1,0 +1,62 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto p-6 bg-background rounded-lg shadow-lg">
+    <h1 class="text-3xl font-bold text-primary mb-6">Upload CSV with URLs</h1>
+    
+    <div class="bg-secondary bg-opacity-10 p-6 rounded-lg mb-6">
+        <h2 class="text-xl font-semibold text-text mb-4">Instructions</h2>
+        <p class="text-text mb-3">
+            Upload a CSV file containing URLs to extract contact information from websites.
+        </p>
+        <ul class="list-disc list-inside text-text space-y-2">
+            <li>The CSV file should contain URLs in any column</li>
+            <li>URLs should start with http:// or https://</li>
+            <li>Each URL will be processed to extract email addresses and phone numbers</li>
+        </ul>
+    </div>
+    
+    <form method="post" enctype="multipart/form-data" class="space-y-6">
+        {% csrf_token %}
+        
+        <div class="border-2 border-dashed border-secondary border-opacity-50 rounded-lg p-6 text-center">
+            <label for="{{ form.csv_file.id_for_label }}" class="block">
+                <div class="mb-4">
+                    <svg class="mx-auto h-12 w-12 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                    </svg>
+                </div>
+                <span class="text-text font-medium">Click to select a CSV file</span>
+                <span class="block text-sm text-text opacity-70 mt-1">or drag and drop</span>
+                {{ form.csv_file }}
+            </label>
+        </div>
+        
+        <div class="flex justify-center">
+            <button type="submit" class="px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-opacity-90 transition duration-300 transform hover:scale-105">
+                Upload and Process
+            </button>
+        </div>
+    </form>
+    
+    {% if messages %}
+    <div class="mt-6">
+        {% for message in messages %}
+        <div class="p-4 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-700{% elif message.tags == 'success' %}bg-green-100 text-green-700{% elif message.tags == 'warning' %}bg-yellow-100 text-yellow-700{% else %}bg-blue-100 text-blue-700{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    
+    {% if debug_info %}
+    <div class="mt-6 p-4 bg-red-100 text-red-700 rounded-lg">
+        <h3 class="font-bold mb-2">Debug Information</h3>
+        <p>File name: {{ file_name }}</p>
+        <p>File size: {{ file_size }} bytes</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

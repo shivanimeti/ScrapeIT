@@ -1,0 +1,88 @@
+{% load static %}
+{% load tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScrapeIT - Business Contact Finder</title>
+    {% tailwind_css %}
+    <style>
+        .file-input {
+            opacity: 0;
+            width: 0.1px;
+            height: 0.1px;
+            position: absolute;
+        }
+    </style>
+</head>
+<body class="theme-minimal min-h-screen bg-gray-50 flex flex-col bg-[#f5f5f5]">
+    <header class="bg-primary text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="{% url 'search' %}" class="text-2xl font-bold">ScrapeIT</a>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="{% url 'search' %}" class="hover:text-gray-200 transition">Search</a></li>
+                    <li><a href="{% url 'upload_csv' %}" class="hover:text-gray-200 transition">Upload CSV</a></li>
+                    {% if user.is_authenticated %}
+                            <select class="appearance-none border border-[#d2eaf6] bg-tertiary-dark font-bold text-black" name="profile-select" id="select" onchange="navigate()" title="{{user.username}}">
+                                <option value="" class="hidden "> {{user.username}}</option>
+                                <option value="{% url 'yourProfile' %}">Profile</option>
+                                <option value="{% url 'logout' %}" class="text-red-700">Logout ↪</option>
+                            </select>
+                        {% else %}
+                        <div>
+                            <a class="justify-self-end font-bold" href="{% url 'login' %}">Login</a> |
+                            <a class="justify-self-end font-bold" href="{% url 'register' %}">Register</a>
+                        </div>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="flex-grow py-8 px-4">
+        {% block content %}{% endblock %}
+    </main>
+    
+    {% comment %} <footer class="bg-gray-800 text-white py-6">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p>&copy; 2024 ScrapeIT. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="#" class="hover:text-gray-300 transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-gray-300 transition">Terms of Service</a>
+                    <a href="#" class="hover:text-gray-300 transition">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer> {% endcomment %}
+    
+    <script>
+        // Make file input more user-friendly
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.querySelector('.file-input');
+            if (fileInput) {
+                fileInput.addEventListener('change', function(e) {
+                    const fileName = e.target.files[0].name;
+                    const fileLabel = document.querySelector('label[for="' + fileInput.id + '"] span');
+                    if (fileLabel) {
+                        fileLabel.textContent = fileName;
+                    }
+                });
+            }
+        });
+
+        function navigate(){
+        const select = document.getElementById('select')
+        const url = select.value
+        if(url){
+            window.location.href = url;
+        }
+    }
+    </script>
+</body>
+</html>

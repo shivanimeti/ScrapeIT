@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto p-6 bg-background rounded-lg shadow-lg">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-primary">Contact Information</h1>
+        <div class="flex space-x-3">
+            <a href="{% url 'search' %}" class="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-opacity-90 transition">
+                New Search
+            </a>
+            <a href="{% url 'download_contact_csv' %}" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 transition">
+                Download CSV
+            </a>
+        </div>
+    </div>
+    
+    {% if contact_info %}
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white rounded-lg overflow-hidden">
+            <thead class="bg-primary bg-opacity-10">
+                <tr>
+                    <th class="py-3 px-4 text-left text-text font-semibold text-white">Website</th>
+                    <th class="py-3 px-4 text-left text-text font-semibold text-white">Email</th>
+                    <th class="py-3 px-4 text-left text-text font-semibold text-white">Phone</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                {% for info in contact_info %}
+                <tr class="hover:bg-gray-50">
+                    <td class="py-3 px-4 text-primary">
+                        <a href="{{ info.url }}" target="_blank" class="hover:underline">
+                            {{ info.url|truncatechars:40 }}
+                        </a>
+                    </td>
+                    <td class="py-3 px-4 text-text">{{ info.email|default:"-" }}</td>
+                    <td class="py-3 px-4 text-text">{{ info.phone|default:"-" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="p-6 bg-yellow-100 text-yellow-700 rounded-lg">
+        No contact information found.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
